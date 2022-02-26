@@ -1,0 +1,26 @@
+{
+  "name": "youcanshop/queryoption",
+  "type": "project",
+  "description": "Package to help with filtering/search/sort in queries",
+  "keywords": [
+    "query",
+    "filtering",
+    "search",
+    "sort"
+  ],
+  "require": {},
+
+  "require-dev": {},
+
+  "autoload": {
+    "psr-4": {
+      "YouCanShop\\": "src/"
+    }
+  },
+
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "Tests/"
+    }
+  }
+}
