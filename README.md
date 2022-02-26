@@ -3,6 +3,8 @@
 <br><b>QueryOption</b>
 </p>
 
+[![Tests](https://github.com/NextmediaMa/QueryOption/actions/workflows/tests.yaml/badge.svg)](https://github.com/NextmediaMa/QueryOption/actions/workflows/tests.yaml)
+
 This package helps you manipulate HTTP query data as an object instead of passing an array through different layers of your application.
 
 ## Usage
