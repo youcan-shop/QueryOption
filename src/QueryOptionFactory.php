@@ -21,10 +21,7 @@ class QueryOptionFactory
         $queryFilters = new QueryFilterCollection();
 
         foreach ((array)Arr::get($_REQUEST, 'filters', []) as $filter) {
-            if (
-                !Arr::has($filter, ['field', 'value']) ||
-                empty($filter['field']) || empty($filter['value'])
-            ) {
+            if (!Arr::has($filter, ['field', 'value']) || empty($filter['field']) || empty($filter['value'])) {
                 continue;
             }
 
