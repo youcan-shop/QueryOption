@@ -5,4 +5,4 @@
 /Tests export-ignore
 /.github export-ignore
 /assets export-ignore
-/.phpunit.xml export-ignore
+/phpunit.xml export-ignore
