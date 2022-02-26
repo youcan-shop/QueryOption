@@ -2,6 +2,8 @@
 
 namespace YouCanShop\QueryOption;
 
+use Illuminate\Http\Request as IlluminateRequest;
+use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 use Illuminate\Support\Arr;
 use YouCanShop\QueryOption\Exceptions\InvalidFilterOperatorException;
 
@@ -9,18 +11,23 @@ class QueryOptionFactory
 {
     public static function createFromRequestGlobals(): QueryOption
     {
-        $page = (int)Arr::get($_REQUEST, 'page', 1);
-        $limit = (int)Arr::get($_REQUEST, 'limit', QueryOption::DEFAULT_LIMIT);
+        return self::createFromArray($_REQUEST);
+    }
 
-        $querySearch = new QuerySearch((string)Arr::get($_REQUEST, 'q', ''));
+    public static function createFromArray(array $attributes): QueryOption
+    {
+        $page = (int)Arr::get($attributes, 'page', 1);
+        $limit = (int)Arr::get($attributes, 'limit', QueryOption::DEFAULT_LIMIT);
+
+        $querySearch = new QuerySearch((string)Arr::get($attributes, 'q', ''));
         $querySort = new QuerySort(
-            (string)Arr::get($_REQUEST, 'sort_field', QuerySort::DEFAULT_SORT_FIELD),
-            (string)Arr::get($_REQUEST, 'sort_order', QuerySort::SORT_DESC)
+            (string)Arr::get($attributes, 'sort_field', QuerySort::DEFAULT_SORT_FIELD),
+            (string)Arr::get($attributes, 'sort_order', QuerySort::SORT_DESC)
         );
 
         $queryFilters = new QueryFilterCollection();
 
-        foreach ((array)Arr::get($_REQUEST, 'filters', []) as $filter) {
+        foreach ((array)Arr::get($attributes, 'filters', []) as $filter) {
             if (!Arr::has($filter, ['field', 'value']) || empty($filter['field']) || empty($filter['value'])) {
                 continue;
             }
@@ -37,6 +44,16 @@ class QueryOptionFactory
         }
 
         return new QueryOption($querySearch, $queryFilters, $querySort, $page, $limit);
+    }
+
+    public static function createFromIlluminateRequest(IlluminateRequest $request): QueryOption
+    {
+        return self::createFromArray($request->all());
+    }
+
+    public static function createFromSymfonyRequest(SymfonyRequest $request): QueryOption
+    {
+        return self::createFromArray($request->request->all());
     }
 
     public static function createDefault(): QueryOption
