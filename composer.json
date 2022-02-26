@@ -12,8 +12,11 @@
     "MIT"
   ],
   "require": {
-    "php": "^7.4 || ^8.0",
-    "illuminate/collections": "^8.83"
+    "php": "^7.4 || ^8.0"
+  },
+  "require-dev": {
+    "pestphp/pest": "^1.21",
+    "squizlabs/php_codesniffer": "^3.6"
   },
   "autoload": {
     "psr-4": {
@@ -28,10 +31,6 @@
   "suggest": {
     "symfony/http-foundation": "to easilly work with http requests",
     "illuminate/http": "if you're using Laravel framework"
-  },
-  "require-dev": {
-    "pestphp/pest": "^1.21",
-    "squizlabs/php_codesniffer": "^3.6"
   },
   "config": {
     "allow-plugins": {

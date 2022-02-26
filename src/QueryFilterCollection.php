@@ -2,19 +2,22 @@
 
 namespace YouCanShop\QueryOption;
 
-use Illuminate\Support\Collection;
+use ArrayAccess;
+use Countable;
 
-class QueryFilterCollection extends Collection
+class QueryFilterCollection implements ArrayAccess, Countable, \Iterator
 {
+    private array $filters = [];
+
+    private int $iteratorCursor = 0;
+
     public function deleteByName(string $name): self
     {
-        $this->each(
-            function (QueryFilter $queryFilter, $index) use ($name) {
-                if ($queryFilter->getField() === $name) {
-                    $this->forget($index);
-                }
+        foreach ($this->filters as $key => $filter) {
+            if ($filter->getField() === $name) {
+                unset($this->filters[$key]);
             }
-        );
+        }
 
         return $this;
     }
@@ -25,6 +28,7 @@ class QueryFilterCollection extends Collection
      * @param mixed|null $value
      *
      * @return $this
+     * @throws Exceptions\InvalidFilterOperatorException
      */
     public function addFilterParams(string $field, $operator, $value = null): self
     {
@@ -44,7 +48,7 @@ class QueryFilterCollection extends Collection
             $this->deleteByName($queryFilter->getField());
         }
 
-        $this->push($queryFilter);
+        $this->filters[] = $queryFilter;
 
         return $this;
     }
@@ -56,10 +60,72 @@ class QueryFilterCollection extends Collection
 
     public function findByName(string $name): ?QueryFilter
     {
-        return $this->first(
-            function (QueryFilter $queryFilter) use ($name) {
-                return $queryFilter->getField() === $name;
+        foreach ($this->filters as $filter) {
+            if ($filter->getField() === $name) {
+                return $filter;
             }
-        );
+        }
+
+        return null;
+    }
+
+    public function isEmpty(): bool
+    {
+        return $this->count() === 0;
+    }
+
+    public function isNotEmpty(): bool
+    {
+        return $this->isEmpty() === false;
+    }
+
+    public function offsetExists($offset)
+    {
+        return isset($this->filters[$offset]);
+    }
+
+    public function offsetGet($offset)
+    {
+        return $this->filters[$offset];
+    }
+
+    public function offsetSet($offset, $value)
+    {
+        throw new \Exception('use addFilter to add new filters');
+    }
+
+    public function offsetUnset($offset)
+    {
+        return $this->deleteByName($offset);
+    }
+
+    public function count()
+    {
+        return count($this->filters);
+    }
+
+    public function current()
+    {
+        return $this->filters[$this->iteratorCursor];
+    }
+
+    public function next()
+    {
+        return $this->iteratorCursor++;
+    }
+
+    public function key()
+    {
+        return $this->iteratorCursor;
+    }
+
+    public function valid()
+    {
+        return $this->iteratorCursor >= 0 && $this->iteratorCursor < $this->count();
+    }
+
+    public function rewind()
+    {
+        $this->iteratorCursor = 0;
     }
 }

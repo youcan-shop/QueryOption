@@ -4,7 +4,7 @@ namespace YouCanShop\QueryOption;
 
 use Illuminate\Http\Request as IlluminateRequest;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
-use Illuminate\Support\Arr;
+use YouCanShop\QueryOption\Helpers\Arr;
 use YouCanShop\QueryOption\Exceptions\InvalidFilterOperatorException;
 
 class QueryOptionFactory
@@ -37,7 +37,7 @@ class QueryOptionFactory
                 $operator = Arr::get($filter, 'operator', QueryFilter::OPERATOR_EQ);
                 $value = Arr::get($filter, 'value', null);
 
-                $queryFilters->push(new QueryFilter($field, $operator, $value));
+                $queryFilters->addFilter(new QueryFilter($field, $operator, $value));
             } catch (InvalidFilterOperatorException $e) {
                 continue;
             }

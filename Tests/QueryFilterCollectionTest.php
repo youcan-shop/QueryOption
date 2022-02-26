@@ -7,7 +7,7 @@ test('I can add filter by params', function () {
     $filterCollection = new QueryFilterCollection();
     $filterCollection->addFilterParams('myfield', 'myvalue');
 
-    $queryFilter = $filterCollection->first();
+    $queryFilter = $filterCollection->findByName('myfield');
 
     expect($queryFilter)->toBeInstanceOf(QueryFilter::class);
     expect($filterCollection)->toHaveCount(1);
@@ -17,7 +17,7 @@ test('I can add filter by object', function () {
     $filterCollection = new QueryFilterCollection();
     $filterCollection->addFilter(new QueryFilter('myfield', 'myvalue'));
 
-    $queryFilter = $filterCollection->first();
+    $queryFilter = $filterCollection->findByName('myfield');
 
     expect($queryFilter)->toBeInstanceOf(QueryFilter::class);
     expect($filterCollection)->toHaveCount(1);

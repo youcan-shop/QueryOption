@@ -106,9 +106,11 @@ class QueryOption
      */
     public function allowedFilters(array $filtersNames): self
     {
-        $this->filters = $this->getFilters()->filter(function (QueryFilter $filter) use ($filtersNames) {
-            return in_array($filter->getField(), $filtersNames);
-        });
+        foreach ($this->getFilters() as $filter) {
+            if (!in_array($filter->getField(), $filtersNames)) {
+                $this->filters = $this->filters->deleteByName($filter->getField());
+            }
+        }
 
         return $this;
     }

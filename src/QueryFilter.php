@@ -23,6 +23,14 @@ class QueryFilter
     /** @var mixed */
     private $value;
 
+    /**
+     * QueryFilter constructor.
+     *
+     * @param string $field
+     * @param $operator
+     * @param null $value
+     * @throws InvalidFilterOperatorException
+     */
     public function __construct(string $field, $operator, $value = null)
     {
         // fallback to `=` operator when skipped
