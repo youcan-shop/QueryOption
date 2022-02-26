@@ -11,7 +11,7 @@ This package helps you manipulate HTTP query data as an object instead of passin
 
 Inside a controller we tend to extract the params from the request and send them to our service and then to the repository to perform search, sort or filtering.
 
-```
+```php
 class ListUsersController as Controller
 {
     private UserService $userService;
@@ -62,7 +62,7 @@ Since the QueryOption package parse the URL parameters, we're going to explain t
 
 The `QueryOption` is the glue that holds all the rest of the components.
 
-```
+```php
 $queryOption->getSort();
 $queryOption->getFilters();
 $queryOption->getSearch();
@@ -73,7 +73,7 @@ In this case, you can use the `allowedFilters()` method inside the controller to
 
 An example would be listing blog posts. The admin can all the posts, while the normal user can only see the published ones.
 
-```
+```php
 class AdminPostsController {
     private PostService $postService;
 
@@ -91,7 +91,7 @@ class AdminPostsController {
 }
 ```
 
-```
+```php
 class UserPostsController {
     private PostService $postService;
 
@@ -114,3 +114,4 @@ class UserPostsController {
 
 ## Laravel Bridge
 
+// TODO
