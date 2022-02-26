@@ -30,7 +30,9 @@
   },
   "suggest": {
     "symfony/http-foundation": "to easilly work with http requests",
-    "illuminate/http": "if you're using Laravel framework"
+    "illuminate/http": "if you're using Laravel framework",
+    "illuminate/support": "for the Laravel integration",
+    "illuminate/pipeline": "for the Laravel integration"
   },
   "config": {
     "allow-plugins": {

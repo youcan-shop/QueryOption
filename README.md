@@ -103,7 +103,7 @@ class UserPostsController {
         $queryOption = QueryOptionFactory::createFromIlluminateRequest($request);
 
         // explicitly specify the filter names allowed. 
-        $queryOption->allowedFilters(['published_date', 'author'])
+        $queryOption->allowedFilters(['published_date', 'author']);
 
         $posts = $this->postService->paginate($queryOption);
 
@@ -114,4 +114,134 @@ class UserPostsController {
 
 ## Laravel Bridge
 
-// TODO
+For Laravel applications, you can add Query Option provider inside `config/app.php`
+
+```php
+<?php
+
+use YouCanShop\QueryOption\Laravel\QueryOptionProvider;
+
+return [
+    // ...
+    
+    'providers' => [
+        // ...
+        QueryOptionProvider::class,    
+    ],
+
+    // ...
+];
+```
+
+After that you can benefit from helpers like:
+
+```
+$queryOption = $request->queryOption();
+```
+
+Inside your repository you can use what we call **criterias**. Here's an example on how it works:
+
+```php
+<?php
+
+use YouCanShop\QueryOption\Laravel\UsesQueryOption;
+
+class PostRepository {
+    use UsesQueryOption;
+
+    public function paginated(QueryOption $queryOption)
+    {
+        $query = Post::query();
+
+        [$query, $queryOption] = $this->pipeThroughCriterias($query, $queryOption);
+
+        return $query->paginate(
+            $queryOption->getLimit(),
+            '*',
+            'page',
+            $queryOption->getPage()
+        );
+    }
+
+    protected function getQueryOptionCriterias(): array
+    {
+        return [
+            SearchCriteria::class,
+            FilterByPublishedAtCriteria::class,
+            SortByCriteria::class
+        ];
+    }
+}
+```
+
+So calling the `paginate()` method will pass the query through the list of **criterias** to add the necessary logic for each defined query option.
+Then, we return the modified query instance to continue the pagination.
+
+Below is the code inside each criteria to illustrate how it works.
+
+```php
+class SearchCriteria
+{
+    public function handle(array $data, Closure $next)
+    {
+        [$query, $queryOption] = $data;
+
+        $search = $queryOption->getSearch();
+        if (!empty($search->getTerm())) {
+            if ($search->getType() === 'like') {
+                $query->where('title', 'like', "%" . $search->getTerm() . "%");
+            }
+
+            if ($search->getType() === 'equal') {
+                $query->where('title', '=', $search->getTerm());
+            }
+        }
+        
+        return $next([$query, $queryOption]);
+    }
+}
+```
+
+The search criteria do a search using `like` or `equal` using the term when it's not empty, and return the `$query` and `$queryOption` for the next criteria. 
+
+```php
+class SortByCriteria
+{
+    public function handle(array $data, Closure $next)
+    {
+        [$query, $queryOption] = $data;
+
+        $sort = $queryOption->getSort();
+
+        // allow sorting only by publish date and title
+        if(!in_array($sort->getField(), ['published_date','title'])) {
+            return $next([$query, $queryOption]);
+        }
+
+        $query->orderBy($sort->getField(), $sort->getDirection());
+
+        return $next([$query, $queryOption]);
+    }
+}
+```
+
+The sorting is pretty straightforward in this example. An important thing is to guard against sorting using not allowed fields. 
+
+```php
+class FilterByPublishedAtCriteria
+{
+    public function handle(array $data, Closure $next)
+    {
+        [$query, $queryOption] = $data;
+
+        $filter = $queryOption->getFilters()->findByName('publish_date');
+        
+        $creationDate = Carbon::parse($filter->getValue());
+        $query->whereDate('published_at', $filter->getOperator(), $creationDate);
+
+        return $next([$query, $queryOption]);
+    }
+}
+```
+
+This is it, the pagination will take in consideration the fitering by publish date, searching by title and sorting by publish date.
