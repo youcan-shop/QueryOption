@@ -8,19 +8,33 @@
     "search",
     "sort"
   ],
-  "require": {},
-
-  "require-dev": {},
-
+  "license": [
+    "MIT"
+  ],
+  "require": {
+    "php": "^7.4",
+    "illuminate/collections": "^8.83"
+  },
   "autoload": {
     "psr-4": {
-      "YouCanShop\\": "src/"
+      "YouCanShop\\QueryOption\\": "src/"
     }
   },
-
   "autoload-dev": {
     "psr-4": {
       "Tests\\": "Tests/"
+    }
+  },
+  "suggest": {
+    "symfony/http-foundation": "to easilly work with http requests",
+    "illuminate/http": "if you're using Laravel framework"
+  },
+  "require-dev": {
+    "pestphp/pest": "^1.21"
+  },
+  "config": {
+    "allow-plugins": {
+      "pestphp/pest-plugin": true
     }
   }
 }
