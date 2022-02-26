@@ -6,14 +6,14 @@ use InvalidArgumentException;
 
 class QuerySearch
 {
-    public const SEARCH_TYPE_LIKE = 1;
-    public const SEARCH_TYPE_EQUAL = 2;
+    public const SEARCH_TYPE_LIKE = 'like';
+    public const SEARCH_TYPE_EQUAL = 'equal';
 
     private string $term;
 
     private string $type;
 
-    public function __construct(string $term, string $type = self::SEARCH_TYPE_LIKE)
+    public function __construct(string $term, ?string $type = self::SEARCH_TYPE_LIKE)
     {
         $this->term = $term;
         $this->setType($type);
@@ -29,8 +29,12 @@ class QuerySearch
         return $this->type;
     }
 
-    private function setType(string $type): self
+    private function setType(?string $type): self
     {
+        if ($type === null) {
+            $type = self::SEARCH_TYPE_LIKE;
+        }
+
         if (!in_array($type, [self::SEARCH_TYPE_LIKE, self::SEARCH_TYPE_EQUAL])) {
             throw new InvalidArgumentException();
         }

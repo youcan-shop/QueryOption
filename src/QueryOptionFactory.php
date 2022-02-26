@@ -19,7 +19,7 @@ class QueryOptionFactory
         $page = (int)Arr::get($attributes, 'page', 1);
         $limit = (int)Arr::get($attributes, 'limit', QueryOption::DEFAULT_LIMIT);
 
-        $querySearch = new QuerySearch((string)Arr::get($attributes, 'q', ''));
+        $querySearch = new QuerySearch((string)Arr::get($attributes, 'q', ''), Arr::get($attributes, 'search_type'));
         $querySort = new QuerySort(
             (string)Arr::get($attributes, 'sort_field', QuerySort::DEFAULT_SORT_FIELD),
             (string)Arr::get($attributes, 'sort_order', QuerySort::SORT_DESC)
