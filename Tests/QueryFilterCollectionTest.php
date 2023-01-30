@@ -44,3 +44,18 @@ test('when I add a filter that already exist by the same name, the old one is de
     expect($queryFilter)->toBeInstanceOf(QueryFilter::class);
     expect($queryFilter->getValue())->toEqual('myvalue2');
 });
+
+test('it can be casted to array', function () {
+    $filterCollection = new QueryFilterCollection();
+    $filterCollection->addFilterParams('myfield1', 'myvalue1');
+    $filterCollection->addFilterParams('myfield2', 'myvalue2');
+
+    $expectedArray = [
+        ['field' => 'myfield1', 'operator' => '=', 'value' => 'myvalue1'],
+        ['field' => 'myfield2', 'operator' => '=', 'value' => 'myvalue2'],
+    ];
+
+    foreach ($filterCollection->toArray() as $key => $filterArray) {
+        expect($filterArray)->toMatchArray($expectedArray[$key]);
+    }
+});

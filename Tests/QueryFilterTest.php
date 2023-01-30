@@ -23,3 +23,9 @@ test('query filter fallback to default operator when skipping param', function (
 test('it throws exception on invalid operator', function () {
     new QueryFilter('myfield', 'wrong', 'myvalue');
 })->throws(InvalidFilterOperatorException::class);
+
+test('it can be casted to array', function () {
+    $queryFilter = new QueryFilter('myfield', QueryFilter::OPERATOR_EQ, 'myvalue');
+
+    expect($queryFilter->toArray())->toEqual(['field' => 'myfield', 'operator' => '=', 'value' => 'myvalue']);
+});

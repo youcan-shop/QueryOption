@@ -4,7 +4,7 @@ namespace YouCanShop\QueryOption;
 
 use YouCanShop\QueryOption\Exceptions\InvalidFilterOperatorException;
 
-class QueryFilter
+class QueryFilter implements Arrayable
 {
     public const OPERATOR_EQ = '=';
     public const OPERATOR_IS = 'is';
@@ -91,5 +91,14 @@ class QueryFilter
     public function getValue()
     {
         return $this->value;
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'field' => $this->getField(),
+            'operator' => $this->getOperator(),
+            'value' => $this->getValue(),
+        ];
     }
 }

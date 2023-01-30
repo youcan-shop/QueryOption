@@ -5,8 +5,9 @@ namespace YouCanShop\QueryOption;
 use ArrayAccess;
 use Countable;
 
-class QueryFilterCollection implements ArrayAccess, Countable, \Iterator
+class QueryFilterCollection implements ArrayAccess, Countable, \Iterator, Arrayable
 {
+    /** @var QueryFilter[]  */
     private array $filters = [];
 
     private int $iteratorCursor = 0;
@@ -127,5 +128,15 @@ class QueryFilterCollection implements ArrayAccess, Countable, \Iterator
     public function rewind()
     {
         $this->iteratorCursor = 0;
+    }
+
+    public function toArray(): array
+    {
+        $items = [];
+        foreach ($this->filters as $filter) {
+            $items[] = $filter->toArray();
+        }
+
+        return $items;
     }
 }

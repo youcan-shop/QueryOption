@@ -4,7 +4,7 @@ namespace YouCanShop\QueryOption;
 
 use InvalidArgumentException;
 
-class QuerySearch
+class QuerySearch implements Arrayable
 {
     public const SEARCH_TYPE_LIKE = 'like';
     public const SEARCH_TYPE_EQUAL = 'equal';
@@ -42,5 +42,13 @@ class QuerySearch
         $this->type = $type;
 
         return $this;
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'term' => $this->getTerm(),
+            'type' => $this->getType(),
+        ];
     }
 }

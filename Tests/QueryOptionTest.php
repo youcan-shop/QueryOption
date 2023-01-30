@@ -42,3 +42,43 @@ test('allowed filters remove not allowed filters from filters collection', funct
     expect($queryOption->getFilters()->findByName('created_at'))->toBeNull();
     expect($queryOption->getFilters())->toHaveCount(1);
 });
+
+test('it can be casted to array', function () {
+    $queryOption = new QueryOption(
+        new QuerySearch('term', QuerySearch::SEARCH_TYPE_LIKE),
+        new QueryFilterCollection(),
+        new QuerySort('created_at', QuerySort::SORT_DESC),
+        2,
+        10
+    );
+
+    $filterParams = [
+        [
+            'field' => 'myfield1',
+            'value' => 'myvalue1',
+        ],
+        [
+            'field' => 'myfield2',
+            'value' => 'myvalue2',
+        ]
+    ];
+    foreach ($filterParams as $param) {
+        $queryOption->getFilters()->addFilterParams($param['field'], $param['value']);
+    }
+
+    expect($queryOption->toArray())->toMatchArray([
+        'q' => 'term',
+        'search_type' => 'like',
+        'page' => 2,
+        'limit' => 10,
+        'sort_field' => 'created_at',
+        'sort_order' => 'desc',
+    ]);
+
+    expect($queryOption->toArray())->toHaveKey('filters');
+    expect($queryOption->toArray()['filters'])->toBeArray();
+
+    foreach ($queryOption->getFilters() as $key => $filter) {
+        expect($filter->toArray())->toMatchArray($filterParams[$key]);
+    }
+});

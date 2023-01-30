@@ -2,7 +2,7 @@
 
 namespace YouCanShop\QueryOption;
 
-class QuerySort
+class QuerySort implements Arrayable
 {
     public const DEFAULT_SORT_FIELD = 'created_at';
 
@@ -58,5 +58,13 @@ class QuerySort
     public function getField(): string
     {
         return $this->field;
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'sort_field' => $this->getField(),
+            'sort_order' => $this->getDirection(),
+        ];
     }
 }

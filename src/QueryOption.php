@@ -2,7 +2,7 @@
 
 namespace YouCanShop\QueryOption;
 
-class QueryOption
+class QueryOption implements Arrayable
 {
     const MAX_LIMIT = 50;
     const DEFAULT_LIMIT = 10;
@@ -113,5 +113,18 @@ class QueryOption
         }
 
         return $this;
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'q' => $this->getSearch()->getTerm(),
+            'search_type' => $this->getSearch()->getType(),
+            'page' => $this->getPage(),
+            'limit' => $this->getLimit(),
+            'sort_field' => $this->getSort()->getField(),
+            'sort_order' => $this->getSort()->getDirection(),
+            'filters' => $this->getFilters()->toArray()
+        ];
     }
 }

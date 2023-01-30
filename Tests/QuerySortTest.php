@@ -20,3 +20,9 @@ test('it takes default direction when given the wrong value', function () {
 
     expect($querySort->getDirection())->toEqual(QuerySort::SORT_DESC);
 });
+
+test('it can be casted to array', function () {
+    $querySort = new QuerySort('myfield', 'desc');
+
+    expect($querySort->toArray())->toEqual(['sort_field' => 'myfield', 'sort_order' => 'desc']);
+});
