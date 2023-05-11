@@ -78,7 +78,7 @@ class QueryOption implements Arrayable
         return $this->limit;
     }
 
-    private function setLimit(?int $limit): self
+    public function setLimit(?int $limit): self
     {
         if ($limit === null) {
             $limit = self::DEFAULT_LIMIT;
