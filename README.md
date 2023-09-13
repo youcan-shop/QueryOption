@@ -1,11 +1,11 @@
 <p align="center">
-<img width="150" height="150" src="https://github.com/NextmediaMa/QueryOption/blob/main/assets/queryoptionlogo.svg" alt="Query Option package logo"/>
+<img width="150" height="150" src="https://github.com/youcan-shop/QueryOption/blob/main/assets/queryoptionlogo.svg" alt="Query Option package logo"/>
 <br><b>QueryOption</b>
 </p>
 
-[![Tests](https://github.com/NextmediaMa/QueryOption/actions/workflows/tests.yaml/badge.svg)](https://github.com/NextmediaMa/QueryOption/actions/workflows/tests.yaml)
+[![Tests](https://github.com/youcan-shop/QueryOption/actions/workflows/tests.yaml/badge.svg)](https://github.com/youcan-shop/QueryOption/actions/workflows/tests.yaml)
 [![Total Downloads](https://img.shields.io/packagist/dt/youcanshop/queryoption.svg?style=flat-square)](https://packagist.org/packages/youcanshop/queryoption)
-[![License](https://img.shields.io/github/license/NextmediaMa/QueryOption?style=flat-square)](https://github.com/NextmediaMa/QueryOption/blob/master/LICENSE.md)
+[![License](https://img.shields.io/github/license/youcan-shop/QueryOption?style=flat-square)](https://github.com/youcan-shop/QueryOption/blob/master/LICENSE.md)
 
 This package helps you manipulate HTTP query data as an object instead of passing an array through different layers of your application.
 
