@@ -29,3 +29,12 @@ test('it can be casted to array', function () {
 
     expect($queryFilter->toArray())->toEqual(['field' => 'myfield', 'operator' => '=', 'value' => 'myvalue']);
 });
+
+test('does 0 as filters[field] value supported', function () {
+    $queryFilter = new QueryFilter('field', QueryFilter::OPERATOR_EQ, 0);
+
+    expect($queryFilter->getField())->toEqual('field');
+    expect($queryFilter->getValue())->toBeInt()->toEqual(0);
+    expect($queryFilter->getValue())->not()->toBeNull();
+    expect($queryFilter->getOperator())->toEqual('=');
+});
